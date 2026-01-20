@@ -12,6 +12,7 @@ export default function Home() {
   const stickerRef3 = useRef(null);
   const stickerRef4 = useRef(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const cameraRef = useRef(null);
   
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quote, setQuote] = useState("To infinity and beyond");
@@ -26,6 +27,8 @@ export default function Home() {
   const [songTitle, setSongTitle] = useState("Music Player");
   const songTitleList: string[] = ["Lo-Fi Music", "Background Jazz", "Classical Piano", "Rain Sounds"];
   const songList = ["/audio/lofisong1.mp3", "/audio/jazz.mp3", "/audio/classical.mp3", "/audio/rain.mp3"];
+  const [notesOpen, setNotesOpen] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
 
   async function getQuote() {
     const quote = await fetch("https://api.api-ninjas.com/v2/randomquotes?", {
@@ -120,36 +123,54 @@ export default function Home() {
     <div style={{"--bg-img": "url('/imgs/papercrumpled.jpg')"} as React.CSSProperties}
     className="fixed inset-0 edu-sa-hand-regular react-draggable max-h-screen bg-img overflow-hidden">
       <motion.div whileHover={{y: -10}} className="m-auto mt-150 relative z-50">
-        <motion.main  animate={{ y: contentOpen ? -575 : 0}} onClick={() => {setContentOpen(!contentOpen)}} 
+        <motion.main  animate={{ y: contentOpen ? -575 : 0}} 
+        transition={{duration: 0.5}}
+        onClick={() => {setContentOpen(!contentOpen)}} 
         style={{"--bg-img": "url('/imgs/brownpaper.jpg')"} as React.CSSProperties}
         className="bg-img shadow-lg m-auto flex min-h-150 w-full max-w-3xl items-center py-32 px-16 justify-center flex-col hover:cursor-pointer">
           
           <h1 className="text-4xl text-center font-bold text-white">table of contents</h1>
           
           <div className="flex min-h-80 w-full my-5 justify-evenly items-center flex-wrap">
-            <div onClick={() => {setQuoteOpen(!quoteOpen); if(!quoteOpen) {getQuote();}}} 
+            <motion.div onClick={() => {setQuoteOpen(!quoteOpen); if(!quoteOpen) {getQuote();}}} 
+            whileTap={{scale: 0.95}}  
             style={{"--icon-img": "url('/imgs/textbubble.png')"} as React.CSSProperties}
-            className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
+            className="icon h-25 w-25 m-5 hover:cursor-pointer"></motion.div>
 
-            <div onClick={() => {setMusicOpen(!musicOpen); if (musicOpen == false) {setMusicPlaying(false)}}} 
+            <motion.div onClick={() => {setMusicOpen(!musicOpen); if (musicOpen == false) {setMusicPlaying(false)}}}
+            whileTap={{scale: 0.95}}   
             style={{"--icon-img": "url('/imgs/music.png')"} as React.CSSProperties}
-            className="icon h-25 w-25 m-5 hover:bg-sky-50 hover:cursor-pointer"></div>
+            className="icon h-25 w-25 m-5 hover:cursor-pointer"></motion.div>
 
-            <div onClick={() => {setTimeOpen(!timeOpen);}}  
+            <motion.div onClick={() => {setTimeOpen(!timeOpen);}}
+            whileTap={{scale: 0.95}}  
             style={{"--icon-img": "url('/imgs/clock.png')"} as React.CSSProperties}
-            className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
+            className="icon h-25 w-25 m-5 hover:cursor-pointer"></motion.div>
 
-            <div onClick={() => {setTodoOpen(!todoOpen)}}
+            <motion.div onClick={() => {setTodoOpen(!todoOpen)}}
+            whileTap={{scale: 0.95}}  
             style={{"--icon-img": "url('/imgs/todolist.png')"} as React.CSSProperties}
-            className="icon h-25 w-25 m-5"></div>
+            className="icon h-25 w-25 m-5"></motion.div>
 
-            <div className="h-25 w-25 m-5 bg-white"></div>
-            <div className="h-25 w-25 m-5 bg-white"></div>
-            <div className="h-25 w-25 m-5 bg-white"></div>
+            <motion.div onClick={() => {setNotesOpen(!notesOpen)}}
+            whileTap={{scale: 0.95}}  
+            style={{"--icon-img": "url('/imgs/notes.png')"} as React.CSSProperties}
+            className="icon h-25 w-25 m-5"></motion.div>
 
-            <div onClick={() => {setStickersOpen(!stickersOpen);}}
+            <motion.div onClick={() => {setCameraOpen(!cameraOpen)}}
+            whileTap={{scale: 0.95}}  
             style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
-            className="icon h-25 w-25 m-5"></div>
+            className="icon h-25 w-25 m-5"></motion.div>
+
+            <motion.div onClick={() => {}}
+            whileTap={{scale: 0.95}}  
+            style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
+            className="icon h-25 w-25 m-5"></motion.div>
+
+            <motion.div onClick={() => {setStickersOpen(!stickersOpen);}}
+            whileTap={{scale: 0.95}}  
+            style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
+            className="icon h-25 w-25 m-5"></motion.div>
           </div>
         </motion.main>
       </motion.div>
@@ -218,6 +239,23 @@ export default function Home() {
           </div>
         </div>
       </Draggable>
+
+      <Draggable bounds="parent" nodeRef={nodeRef}>
+        <div ref={nodeRef} className={`bg-white shadow-lg h-60 w-100 rounded absolute left-10 top-10 grab ${notesOpen ? "" : "hidden"}`}>
+          <textarea
+          className="p-2 m-2 text-black resize-none w-96 h-56 block"
+          placeholder="Type notes here..."></textarea>
+        </div>
+      </Draggable>
+
+      {cameraOpen && <>(
+        <Draggable bounds="parent" nodeRef={cameraRef}>
+          <div ref={cameraRef} className="bg-white shadow-lg h-100 w-100 rounded absolute left-10 top-10 grab">
+            Hello
+          </div>
+        </Draggable>
+      )</>}
+      
 
 
 
