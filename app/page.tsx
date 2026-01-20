@@ -11,6 +11,7 @@ export default function Home() {
   const stickerRef2 = useRef(null);
   const stickerRef3 = useRef(null);
   const stickerRef4 = useRef(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quote, setQuote] = useState("To infinity and beyond");
@@ -20,6 +21,11 @@ export default function Home() {
   const [time, setTime] = useState("0:00");
   const [stickersOpen, setStickersOpen] = useState(false);
   const [todoOpen, setTodoOpen] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [currentSong, setCurrentSong] = useState(0);
+  const [songTitle, setSongTitle] = useState("Music Player");
+  const songTitleList: string[] = ["Lo-Fi Music", "Background Jazz", "Classical Piano", "Rain Sounds"];
+  const songList = ["/audio/lofisong1.mp3", "/audio/jazz.mp3", "/audio/classical.mp3", "/audio/rain.mp3"];
 
   async function getQuote() {
     const quote = await fetch("https://api.api-ninjas.com/v2/randomquotes?", {
@@ -44,6 +50,58 @@ export default function Home() {
       //console.log('Current time:', data.datetime);
       //console.log('Timezone:', data.timezone);
     });
+  }
+
+  function musicPlayer() {
+    if (!audioRef.current) return;
+
+    audioRef.current.src = songList[currentSong];
+
+    if (musicPlaying) {
+      audioRef.current.pause();
+    } else if (!musicPlaying) {
+      audioRef.current.play();
+    }
+    setSongTitle(songTitleList[currentSong]);
+
+  }
+
+  function forwardSong() {
+    if (!audioRef.current) return;
+
+    audioRef.current.src = songList[currentSong];
+    setMusicPlaying(false);
+
+    let song = currentSong;
+    if (song >= 0) {
+      if (song < 3) {
+        song += 1;
+      } else {
+        song = 0;
+      }
+    }
+
+    setCurrentSong(song);
+    setSongTitle(songTitleList[song]);
+  }
+
+  function backSong() {
+    if (!audioRef.current) return;
+
+    audioRef.current.src = songList[currentSong];
+    setMusicPlaying(false);
+
+    let song = currentSong;
+    if (song >= 0) {
+      if (song > 0) {
+        song -= 1;
+      } else {
+        song = 3;
+      }
+    }
+    
+    setCurrentSong(song);
+    setSongTitle(songTitleList[song]);
   }
 
   useEffect(() => {
@@ -73,15 +131,12 @@ export default function Home() {
             style={{"--icon-img": "url('/imgs/textbubble.png')"} as React.CSSProperties}
             className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
 
-            <div onClick={() => {setMusicOpen(!musicOpen);}} 
+            <div onClick={() => {setMusicOpen(!musicOpen); if (musicOpen == false) {setMusicPlaying(false)}}} 
             className="h-25 w-25 m-5 bg-white hover:bg-sky-50 hover:cursor-pointer"></div>
 
             <div onClick={() => {setTimeOpen(!timeOpen);}}  
             style={{"--icon-img": "url('/imgs/clock.png')"} as React.CSSProperties}
             className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
-
-            <div onClick={() => {setStickersOpen(!stickersOpen);}}
-            className="h-25 w-25 m-5 bg-white"></div>
 
             <div onClick={() => {setTodoOpen(!todoOpen)}}
             className="h-25 w-25 m-5 bg-white"></div>
@@ -89,6 +144,9 @@ export default function Home() {
             <div className="h-25 w-25 m-5 bg-white"></div>
             <div className="h-25 w-25 m-5 bg-white"></div>
             <div className="h-25 w-25 m-5 bg-white"></div>
+
+            <div onClick={() => {setStickersOpen(!stickersOpen);}}
+            className="h-25 w-25 m-5 bg-white"></div>
           </div>
         </motion.main>
       </motion.div>
@@ -96,7 +154,7 @@ export default function Home() {
       {quoteOpen && (
         <Draggable bounds="parent" nodeRef={nodeRef}>
           <div ref={nodeRef} style={{"--bg-img": "url('/imgs/paperpattern.png')"} as React.CSSProperties}
-          className="bg-img paper-bgite  shadow-lg h-100% w-75 rounded absolute left-10 top-10 grab">
+          className="bg-img shadow-lg h-100% w-75 rounded absolute left-10 top-10 grab">
             <p className="text-xl text-gray-500 p-5 leading-6.5">{quote}</p>
           </div>
         </Draggable>
@@ -104,7 +162,20 @@ export default function Home() {
 
       {musicOpen && (
         <Draggable bounds="parent" nodeRef={nodeRef}>
-          <div ref={nodeRef} className="bg-white shadow-lg h-100 w-75 rounded absolute left-20 top-20 grab z-0">
+          <div ref={nodeRef} className="flex flex-col items-center justify-center bg-[#c4936e] shadow-lg h-40 w-80 rounded absolute left-20 top-20 grab z-0">
+            <h1 className="text-white text-2xl font-bold p-2">{songTitle}</h1>
+            <div className="flex text-black">
+              <div style={{"--icon-img": "url('/imgs/backward.png')"} as React.CSSProperties}
+              onClick={() => {backSong();}}
+              className="icon h-20 w-20 hover:cursor-pointer"></div>
+              <div style={{"--icon-img": !musicPlaying ? "url('/imgs/play.png')" : "url('/imgs/pause.png')"} as React.CSSProperties}
+              onClick={() => {setMusicPlaying(!musicPlaying); musicPlayer();}}
+              className="icon h-20 w-20 hover:cursor-pointer"></div>
+              <div style={{"--icon-img": "url('/imgs/forward.png')"} as React.CSSProperties}
+              onClick={() => {forwardSong()}}
+              className="icon h-20 w-20 hover:cursor-pointer"></div>
+            </div>
+            <audio ref={audioRef} src="/audio/lofisong1.mp3"></audio>
           </div>
         </Draggable>
       )}
