@@ -132,21 +132,24 @@ export default function Home() {
             className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
 
             <div onClick={() => {setMusicOpen(!musicOpen); if (musicOpen == false) {setMusicPlaying(false)}}} 
-            className="h-25 w-25 m-5 bg-white hover:bg-sky-50 hover:cursor-pointer"></div>
+            style={{"--icon-img": "url('/imgs/music.png')"} as React.CSSProperties}
+            className="icon h-25 w-25 m-5 hover:bg-sky-50 hover:cursor-pointer"></div>
 
             <div onClick={() => {setTimeOpen(!timeOpen);}}  
             style={{"--icon-img": "url('/imgs/clock.png')"} as React.CSSProperties}
             className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
 
             <div onClick={() => {setTodoOpen(!todoOpen)}}
-            className="h-25 w-25 m-5 bg-white"></div>
+            style={{"--icon-img": "url('/imgs/todolist.png')"} as React.CSSProperties}
+            className="icon h-25 w-25 m-5"></div>
 
             <div className="h-25 w-25 m-5 bg-white"></div>
             <div className="h-25 w-25 m-5 bg-white"></div>
             <div className="h-25 w-25 m-5 bg-white"></div>
 
             <div onClick={() => {setStickersOpen(!stickersOpen);}}
-            className="h-25 w-25 m-5 bg-white"></div>
+            style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
+            className="icon h-25 w-25 m-5"></div>
           </div>
         </motion.main>
       </motion.div>
@@ -192,30 +195,29 @@ export default function Home() {
         </Draggable>
       )}
 
-      {todoOpen && (
-        <Draggable bounds="parent" nodeRef={nodeRef}>
-          <div ref={nodeRef} style={{"--bg-img": "url('/imgs/brownpaper.jpg')"} as React.CSSProperties}
-          className="bg-img shadow-lg h-100 w-75 rounded absolute left-20 top-20 grab z-0 p-5">
-            <h1 className="text-center text-2xl text-white font-bold">To-Do List</h1>
-            <div className="grid grid-cols-[max-content_1fr] gap-2 mt-2">
-              <input type="checkbox" className="w-5 border-white"></input>
-              <input type="text" className="border bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-              <input type="checkbox" className="w-5"></input>
-              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-              <input type="checkbox" className="w-5"></input>
-              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-              <input type="checkbox" className="w-5"></input>
-              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-              <input type="checkbox" className="w-5"></input>
-              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-              <input type="checkbox" className="w-5"></input>
-              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-              <input type="checkbox" className="w-5"></input>
-              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
-            </div>
+
+      <Draggable bounds="parent" nodeRef={nodeRef}>
+        <div ref={nodeRef} style={{"--bg-img": "url('/imgs/brownpaper.jpg')"} as React.CSSProperties}
+        className={`bg-img shadow-lg h-100 w-75 rounded absolute left-20 top-20 grab z-0 p-5 ${todoOpen ? "" : "hidden"}`}>
+          <h1 className="text-center text-2xl text-white font-bold">To-Do List</h1>
+          <div className="grid grid-cols-[max-content_1fr] gap-2 mt-2">
+            <input type="checkbox" className="w-5 border-white"></input>
+            <input type="text" className="border bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            <input type="checkbox" className="w-5"></input>
+            <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            <input type="checkbox" className="w-5"></input>
+            <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            <input type="checkbox" className="w-5"></input>
+            <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            <input type="checkbox" className="w-5"></input>
+            <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            <input type="checkbox" className="w-5"></input>
+            <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            <input type="checkbox" className="w-5"></input>
+            <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
           </div>
-        </Draggable>
-      )}
+        </div>
+      </Draggable>
 
 
 
