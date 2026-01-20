@@ -1,8 +1,13 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
+import Webcam from "react-webcam";
 import { motion } from 'framer-motion';
 import Image from "next/image";
 import Draggable from "react-draggable";
+
+const WebCamStream = React.memo(({ camRef } : {camRef: React.RefObject<any>}) => {
+    return <Webcam ref={camRef}/>;
+  })
 
 export default function Home() {
   const nodeRef = useRef(null);
@@ -12,6 +17,7 @@ export default function Home() {
   const stickerRef3 = useRef(null);
   const stickerRef4 = useRef(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const cameraOpenRef = useRef(null);
   const cameraRef = useRef(null);
   
   const [quoteOpen, setQuoteOpen] = useState(false);
@@ -129,7 +135,7 @@ export default function Home() {
         style={{"--bg-img": "url('/imgs/brownpaper.jpg')"} as React.CSSProperties}
         className="bg-img shadow-lg m-auto flex min-h-150 w-full max-w-3xl items-center py-32 px-16 justify-center flex-col hover:cursor-pointer">
           
-          <h1 className="text-4xl text-center font-bold text-white">table of contents</h1>
+          <h1 className="text-4xl text-center font-bold text-white">your dashboard</h1>
           
           <div className="flex min-h-80 w-full my-5 justify-evenly items-center flex-wrap">
             <motion.div onClick={() => {setQuoteOpen(!quoteOpen); if(!quoteOpen) {getQuote();}}} 
@@ -159,7 +165,7 @@ export default function Home() {
 
             <motion.div onClick={() => {setCameraOpen(!cameraOpen)}}
             whileTap={{scale: 0.95}}  
-            style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
+            style={{"--icon-img": "url('/imgs/camera.png')"} as React.CSSProperties}
             className="icon h-25 w-25 m-5"></motion.div>
 
             <motion.div onClick={() => {}}
@@ -248,13 +254,16 @@ export default function Home() {
         </div>
       </Draggable>
 
-      {cameraOpen && <>(
-        <Draggable bounds="parent" nodeRef={cameraRef}>
-          <div ref={cameraRef} className="bg-white shadow-lg h-100 w-100 rounded absolute left-10 top-10 grab">
-            Hello
+      {cameraOpen && (
+        <Draggable bounds="parent" nodeRef={cameraOpenRef}>
+          <div ref={cameraOpenRef} 
+          className={`flex items-center justify-center bg-white shadow-lg h-70 w-80 rounded absolute left-10 top-10 grab ${cameraOpen ? "" : "hidden"}`}>
+            <div id="camera-app" className="flex items-center justify-center border border-black p-2 m-2 w-70 h-55 rounded">
+              <WebCamStream camRef={cameraRef}/>
+            </div>
           </div>
         </Draggable>
-      )</>}
+      )}
       
 
 
