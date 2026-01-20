@@ -30,7 +30,7 @@ body {
 }
 
 .paper-bg {
-  background-image: url("/imgs/paperpattern.png");
+  background-image: url('/imgs/paperpattern.png');
   background-repeat: repeat;
 }
 
@@ -47,8 +47,8 @@ body {
 }
 
 
-.paper-crumpled-bg {
-  background-image: url("/imgs/papercrumpled.jpg");
+.bg-img {
+  background-image: var(--bg-img);
   background-repeat: repeat;
 }
 

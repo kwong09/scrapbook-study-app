@@ -19,6 +19,7 @@ export default function Home() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [time, setTime] = useState("0:00");
   const [stickersOpen, setStickersOpen] = useState(false);
+  const [todoOpen, setTodoOpen] = useState(false);
 
   async function getQuote() {
     const quote = await fetch("https://api.api-ninjas.com/v2/randomquotes?", {
@@ -58,14 +59,16 @@ export default function Home() {
   
 
   return (
-    <div className="fixed inset-0 edu-sa-hand-regular react-draggable max-h-screen bg-[#9e5d37] paper-crumpled-bg overflow-hidden">
+    <div style={{"--bg-img": "url('/imgs/papercrumpled.jpg')"} as React.CSSProperties}
+    className="fixed inset-0 edu-sa-hand-regular react-draggable max-h-screen bg-img overflow-hidden">
       <motion.div whileHover={{y: -10}} className="m-auto mt-150 relative z-50">
         <motion.main  animate={{ y: contentOpen ? -575 : 0}} onClick={() => {setContentOpen(!contentOpen)}} 
-        className="paper-bg shadow-lg m-auto flex min-h-150 w-full max-w-3xl items-center py-32 px-16 sm:items-start justify-center flex-col hover:cursor-pointer">
+        style={{"--bg-img": "url('/imgs/brownpaper.jpg')"} as React.CSSProperties}
+        className="bg-img shadow-lg m-auto flex min-h-150 w-full max-w-3xl items-center py-32 px-16 justify-center flex-col hover:cursor-pointer">
           
-          <h1 className="text-4xl font-bold text-gray-500">table of contents</h1>
+          <h1 className="text-4xl text-center font-bold text-white">table of contents</h1>
           
-          <div className="flex min-h-80 w-full bg-sky-200 my-5 justify-evenly items-center flex-wrap">
+          <div className="flex min-h-80 w-full my-5 justify-evenly items-center flex-wrap">
             <div onClick={() => {setQuoteOpen(!quoteOpen); if(!quoteOpen) {getQuote();}}} 
             style={{"--icon-img": "url('/imgs/textbubble.png')"} as React.CSSProperties}
             className="icon h-25 w-25 m-5 hover:cursor-pointer"></div>
@@ -79,7 +82,10 @@ export default function Home() {
 
             <div onClick={() => {setStickersOpen(!stickersOpen);}}
             className="h-25 w-25 m-5 bg-white"></div>
-            <div className="h-25 w-25 m-5 bg-white"></div>
+
+            <div onClick={() => {setTodoOpen(!todoOpen)}}
+            className="h-25 w-25 m-5 bg-white"></div>
+
             <div className="h-25 w-25 m-5 bg-white"></div>
             <div className="h-25 w-25 m-5 bg-white"></div>
             <div className="h-25 w-25 m-5 bg-white"></div>
@@ -89,7 +95,8 @@ export default function Home() {
 
       {quoteOpen && (
         <Draggable bounds="parent" nodeRef={nodeRef}>
-          <div ref={nodeRef} className="bg-white paper-bg shadow-lg h-100% w-75 rounded absolute left-10 top-10 grab">
+          <div ref={nodeRef} style={{"--bg-img": "url('/imgs/paperpattern.png')"} as React.CSSProperties}
+          className="bg-img paper-bgite  shadow-lg h-100% w-75 rounded absolute left-10 top-10 grab">
             <p className="text-xl text-gray-500 p-5 leading-6.5">{quote}</p>
           </div>
         </Draggable>
@@ -105,14 +112,41 @@ export default function Home() {
       {timeOpen && (
         <Draggable bounds="parent" nodeRef={timeRef}>
           <div ref={timeRef}
-          className="flex bg-sky-200 font-mono shadow-lg h-40 w-75 rounded absolute left-20 top-20 grab z-0 items-center justify-center flex-col">
-            <div className="bg-white p-6 rounded text-gray-400 flex items-center justify-center flex-col">
+          className="flex bg-[#d9a782] font-mono shadow-lg h-40 w-75 rounded absolute left-20 top-20 grab z-0 items-center justify-center flex-col">
+            <div className="bg-white p-6 rounded text-gray-600 flex items-center justify-center flex-col">
               <p className="text-4xl">{time}</p>
-              <a target="_blank" className="text-xs italic text-sky-300 hover:underline" href="https://time.now">World Time API by Time.Now</a>
+              <a target="_blank" className="text-xs italic text-[#d9a782] hover:underline" href="https://time.now">World Time API by Time.Now</a>
             </div>
           </div>
         </Draggable>
       )}
+
+      {todoOpen && (
+        <Draggable bounds="parent" nodeRef={nodeRef}>
+          <div ref={nodeRef} style={{"--bg-img": "url('/imgs/brownpaper.jpg')"} as React.CSSProperties}
+          className="bg-img shadow-lg h-100 w-75 rounded absolute left-20 top-20 grab z-0 p-5">
+            <h1 className="text-center text-2xl text-white font-bold">To-Do List</h1>
+            <div className="grid grid-cols-[max-content_1fr] gap-2 mt-2">
+              <input type="checkbox" className="w-5 border-white"></input>
+              <input type="text" className="border bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+              <input type="checkbox" className="w-5"></input>
+              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+              <input type="checkbox" className="w-5"></input>
+              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+              <input type="checkbox" className="w-5"></input>
+              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+              <input type="checkbox" className="w-5"></input>
+              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+              <input type="checkbox" className="w-5"></input>
+              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+              <input type="checkbox" className="w-5"></input>
+              <input type="text" className="order bg-white rounded-xl border-white p-1 h-full resize-y text-gray-600"></input>
+            </div>
+          </div>
+        </Draggable>
+      )}
+
+
 
       {stickersOpen && <>(
         <Draggable bounds="parent" nodeRef={stickerRef1}>
