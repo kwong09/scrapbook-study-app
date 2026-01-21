@@ -34,6 +34,7 @@ export default function Home() {
   const songTitleList: string[] = ["Lo-Fi Music", "Background Jazz", "Classical Piano", "Rain Sounds"];
   const songList = ["/audio/lofisong1.mp3", "/audio/jazz.mp3", "/audio/classical.mp3", "/audio/rain.mp3"];
   const [notesOpen, setNotesOpen] = useState(false);
+  const [notes, setNotes] = useState<string>("");
   const [cameraOpen, setCameraOpen] = useState(false);
 
   async function getQuote() {
@@ -114,6 +115,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    
     getTime();
     const interval = setInterval(() => {
       getTime();
@@ -123,7 +125,24 @@ export default function Home() {
       clearInterval(interval);
     }
   }, []);
-  
+
+  const notesLoaded = useRef(false);
+
+  useEffect(() => {
+    if (notesLoaded.current) {
+      localStorage.setItem("notes-content", notes);
+    }
+  }, [notes])
+
+  useEffect(() => {
+    const localNotes = localStorage.getItem("notes-content");
+    if (localNotes) {
+      setNotes(localNotes);
+    }
+
+    notesLoaded.current = true;
+  }, [])
+
 
   return (
     <div style={{"--bg-img": "url('/imgs/papercrumpled.jpg')"} as React.CSSProperties}
@@ -250,15 +269,17 @@ export default function Home() {
         <div ref={nodeRef} className={`bg-white shadow-lg h-60 w-100 rounded absolute left-10 top-10 grab ${notesOpen ? "" : "hidden"}`}>
           <textarea
           className="p-2 m-2 text-black resize-none w-96 h-56 block"
-          placeholder="Type notes here..."></textarea>
+          placeholder="Type notes here..."
+          value={notes} onChange={(n) => setNotes(n.target.value)}
+          ></textarea>
         </div>
       </Draggable>
 
       {cameraOpen && (
         <Draggable bounds="parent" nodeRef={cameraOpenRef}>
-          <div ref={cameraOpenRef} 
-          className={`flex items-center justify-center bg-white shadow-lg h-70 w-80 rounded absolute left-10 top-10 grab ${cameraOpen ? "" : "hidden"}`}>
-            <div id="camera-app" className="flex items-center justify-center border border-black p-2 m-2 w-70 h-55 rounded">
+          <div ref={cameraOpenRef} style={{"--bg-img": "url('/imgs/brownpapercrumpled.jpg')"} as React.CSSProperties}
+          className={`bg-img flex items-center justify-center shadow-lg h-70 w-80 rounded absolute left-10 top-10 grab ${cameraOpen ? "" : "hidden"}`}>
+            <div id="camera-app" className="bg-white flex items-center justify-center p-2 m-2 w-72 h-55 rounded">
               <WebCamStream camRef={cameraRef}/>
             </div>
           </div>
@@ -270,7 +291,7 @@ export default function Home() {
 
       {stickersOpen && <>(
         <Draggable bounds="parent" nodeRef={stickerRef1}>
-          <div ref={stickerRef1} style={{"--sticker-img": "url('/imgs/sticker1.png')"} as React.CSSProperties} 
+          <div ref={stickerRef1} style={{"--sticker-img": "url('/imgs/sticker1.png')"} as React.CSSProperties}
           className="sticker h-25 w-25 absolute left-10 top-25 grab z-0">
           </div>
         </Draggable>
