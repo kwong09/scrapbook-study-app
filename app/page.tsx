@@ -36,7 +36,6 @@ export default function Home() {
   const [notesOpen, setNotesOpen] = useState(false);
   const [notes, setNotes] = useState<string>("");
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [timerOpen, setTimerOpen] = useState(false);
 
   async function getQuote() {
     const quote = await fetch("https://api.api-ninjas.com/v2/randomquotes?", {
@@ -188,11 +187,6 @@ export default function Home() {
             style={{"--icon-img": "url('/imgs/camera.png')"} as React.CSSProperties}
             className="icon h-25 w-25 m-5"></motion.div>
 
-            <motion.div onClick={() => {setTimerOpen(!timerOpen)}}
-            whileTap={{scale: 0.95}}  
-            style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
-            className="icon h-25 w-25 m-5"></motion.div>
-
             <motion.div onClick={() => {setStickersOpen(!stickersOpen);}}
             whileTap={{scale: 0.95}}  
             style={{"--icon-img": "url('/imgs/sticker.png')"} as React.CSSProperties}
@@ -282,22 +276,6 @@ export default function Home() {
           className={`bg-img flex items-center justify-center shadow-lg h-70 w-80 rounded absolute left-10 top-10 grab ${cameraOpen ? "" : "hidden"}`}>
             <div id="camera-app" className="bg-white flex items-center justify-center p-2 m-2 w-72 h-55 rounded">
               <WebCamStream camRef={cameraRef}/>
-            </div>
-          </div>
-        </Draggable>
-      )}
-      
-      {timerOpen && (
-        <Draggable bounds="parent" nodeRef={nodeRef}>
-          <div ref={nodeRef} className="bg-[#c4936e] shadow-lg h-40 w-60 rounded absolute left-10 top-10 grab flex justify-center items-center">
-            <div className="bg-white rounded h-30 w-50 flex items-center justify-center flex-col text-gray-600">
-              <div className="font-mono text-4xl">
-                5:00
-              </div>
-              <div className="">
-                <button className="px-2 m-1 border rounded bg-[#d9a782] text-white hover:bg-[#c4936e] hover:cursor-pointer">Start</button>
-                <button className="px-2 m-1 border rounded bg-[#d9a782] text-white hover:bg-[#c4936e] hover:cursor-pointer">Stop</button>
-              </div>
             </div>
           </div>
         </Draggable>
